@@ -8,8 +8,38 @@ datasource db {
 }
 
 model User {
-  id        Int     @default(autoincrement()) @id
-  email     String  @unique
-  username  String?
-  password  String
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
+  password   String
+  username   String?
+  avatar     String?
+  role       Role      @default(USER)
+  posts      Post[]
+  comments   Comment[]
+}
+
+model Post {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  title      String    @db.VarChar(255)
+  body       Json
+  author     User?     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authorId   Int?
+  views      Int       @default(0)
+  comments   Comment[]
+}
+
+model Comment {
+  id        Int    @default(autoincrement()) @id
+  body      Json
+  author    User?  @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authorId  Int?
+  post      Post?  @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  postId    Int?
+}
+
+enum Role {
+  USER
+  ADMIN
 }
