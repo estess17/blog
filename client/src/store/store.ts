@@ -1,9 +1,12 @@
 import {configureStore, ThunkAction, Action} from '@reduxjs/toolkit';
+import postsSlice from './slices/posts.slice';
+import darkModeSlice from './slices/darkMode.slice';
 
 
 export const store = configureStore({
     reducer: {
-
+        darkMode: darkModeSlice,
+        posts: postsSlice,
     },
 });
 

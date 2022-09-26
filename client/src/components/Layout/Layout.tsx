@@ -5,9 +5,11 @@ import Footer from './Footer/Footer';
 
 function Layout(props: PropsWithChildren) {
     return (
-        <div className="container">
+        <div className="flex flex-col h-screen">
             <Header/>
-            {props.children}
+            <main className="flex-grow bg-gray-50 dark:bg-slate-900">
+                {props.children}
+            </main>
             <Footer/>
         </div>
     );
