@@ -7,3 +7,11 @@
         font-family: 'Inter', sans-serif;
     }
 }
+
+@layer components {
+    .btn {
+        @apply rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium
+        text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 sm:mt-0 sm:ml-3
+        sm:w-auto sm:text-sm dark:border-slate-600 dark:text-slate-200
+    }
+}

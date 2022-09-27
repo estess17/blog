@@ -21,7 +21,7 @@ function Post(props: { post: IPost }) {
             <div className="flex items-center justify-between mt-3">
                 <div className="flex items-center">
                     <Link to={`user/${post.authorId}`}>
-                        <img src={avatar} alt="avatar" className="w-10 rounded-full mr-2"/>
+                        <img src={avatar} alt="avatar" className="w-10 rounded-full mr-2 ring-2 ring-gray-100 dark:ring-slate-700"/>
                     </Link>
                     <div>
                         <Link to={`user/${post.authorId}`} className="font-medium text-gray-800 dark:text-slate-100">

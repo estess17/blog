@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {CgSearch, CgMoon, CgSun} from 'react-icons/cg';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
-import {toggle} from '../../../store/slices/darkMode.slice';
+import {toggle} from '../../../store/slices/dark-mode.slice';
+import {openLogin, openRegister} from '../../../store/slices/modals.slice';
 
 
 function Header() {
@@ -43,8 +44,9 @@ function Header() {
                             onClick={() => setIsDark(state => !state)}/>
                     }
                     <button
-                        className="py-1 px-2 ml-3 w-24 border rounded-md font-semibold hover:shadow-sm
-                         dark:text-gray-100 dark:border-slate-700 dark:shadow-slate-700">
+                        className="btn w-20 dark:bg-transparent  dark:hover:bg-slate-700 dark:focus:ring-slate-600 dark:focus:ring-offset-slate-800"
+                        onClick={() => dispatch(openLogin())}
+                    >
                         Log in
                     </button>
                 </div>

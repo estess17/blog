@@ -1,6 +1,7 @@
 import React, {PropsWithChildren} from 'react';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
+import {Login, Register} from '../index';
 
 
 function Layout(props: PropsWithChildren) {
@@ -11,6 +12,9 @@ function Layout(props: PropsWithChildren) {
                 {props.children}
             </main>
             <Footer/>
+
+            <Login/>
+            <Register/>
         </div>
     );
 }

@@ -1,11 +1,11 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 
-interface postsState {
+interface darkState {
     isDark: boolean;
 }
 
-const initialState: postsState = {
+const initialState: darkState = {
     isDark: localStorage.theme === 'dark',
 };
 
