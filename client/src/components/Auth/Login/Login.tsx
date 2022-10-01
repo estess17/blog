@@ -1,20 +1,41 @@
 import {Dialog, Transition} from '@headlessui/react';
-import React, {FormEvent, Fragment, useRef, useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../../utils/hooks';
-import {closeLogin, openRegister} from '../../store/slices/modals.slice';
+import {Fragment, useRef} from 'react';
+import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
+import {closeLogin, openRegister} from '../../../store/slices/modals.slice';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {login} from '../../../store/asyncActions/auth.actions';
+import {ILoginFormInputs} from '../../../utils/interfaces';
+import * as yup from 'yup';
 
+
+const loginSchema = yup.object({
+    email: yup.string().email().required(),
+    password: yup.string().min(6).max(64).required(),
+}).required();
 
 function Login() {
     const open = useAppSelector(state => state.modals.isLogin);
     const cancelButtonRef = useRef(null);
     const dispatch = useAppDispatch();
+    const {register, handleSubmit, reset, formState: {errors}} = useForm<ILoginFormInputs>({
+        resolver: yupResolver(loginSchema),
+    });
+
+
+    function onSubmit(data: ILoginFormInputs) {
+        reset();
+        dispatch(login(data));
+    }
 
     function handleClose() {
+        reset();
         dispatch(closeLogin());
     }
 
-    function handleSubmit() {
-        console.log('submit');
+    function onSwitch() {
+        reset();
+        dispatch(openRegister());
     }
 
     return (
@@ -56,25 +77,32 @@ function Login() {
                                                 <p className="text-sm text-gray-500 dark:text-slate-400">
                                                     You need to log in to be able to create and comment posts
                                                 </p>
+
                                                 <form className="flex flex-col mt-4">
                                                     <input type="email"
-                                                           name="email"
                                                            placeholder="Email"
-                                                           className="py-2.5 px-2 border rounded outline-none focus:ring-1 focus:ring-gray-300 text-sm
-                                                           dark:bg-transparent dark:border-slate-700 dark:focus:ring-slate-500 dark:text-slate-400 dark:placeholder-slate-500"
+                                                           autoComplete="email"
+                                                           className={`input ${errors.email && 'border-red-600 dark:border-red-900'}`}
+                                                           {...register('email', {required: true})}
                                                     />
+                                                    <p className="mt-1 text-sm text-red-800 font-medium dark:text-red-600">
+                                                        {errors.email?.message}
+                                                    </p>
                                                     <input type="password"
-                                                           name="password"
-                                                           id="password"
                                                            placeholder="Password"
-                                                           className="mt-2 py-2.5 px-2 border rounded outline-none focus:ring-1 focus:ring-gray-300 text-sm
-                                                            dark:bg-transparent dark:border-slate-700 dark:focus:ring-slate-500 dark:text-slate-400 dark:placeholder-slate-500"
+                                                           autoComplete="current-password"
+                                                           className={`input mt-2 ${errors.password && 'border-red-600 dark:border-red-900'}`}
+                                                           {...register('password', {required: true, minLength: 6})}
                                                     />
+                                                    <p className="mt-1 text-sm text-red-800 font-medium dark:text-red-600">
+                                                        {errors.password?.message}
+                                                    </p>
                                                 </form>
+
                                                 <p className="mt-4 text-sm text-gray-500 dark:text-slate-400">
                                                     Dont have an account?&nbsp;
                                                     <span className="text-teal-600 font-semibold cursor-pointer"
-                                                          onClick={() => dispatch(openRegister())}>Sign Up</span>
+                                                          onClick={onSwitch}>Sign Up</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -85,13 +113,13 @@ function Login() {
                                     <button
                                         type="button"
                                         className="btn bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 dark:focus:ring-offset-slate-800"
-                                        onClick={handleSubmit}
+                                        onClick={handleSubmit(onSubmit)}
                                     >
                                         Log in
                                     </button>
                                     <button
                                         type="button"
-                                        className="btn dark:bg-transparent  dark:focus:ring-slate-600 dark:focus:ring-offset-slate-800"
+                                        className="btn dark:bg-transparent dark:focus:ring-slate-600 dark:focus:ring-offset-slate-800"
                                         onClick={handleClose}
                                         ref={cancelButtonRef}
                                     >

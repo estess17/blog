@@ -1,1 +1,3 @@
 declare module '*.png'
+
+export {}

@@ -21,3 +21,15 @@ export interface IPost {
     createdAt: Date | string;
     updatedAt: Date | string;
 }
+
+
+export interface ILoginFormInputs {
+    email: string;
+    password: string;
+}
+
+export interface IRegisterFormInputs {
+    username: string;
+    email: string;
+    password: string;
+}

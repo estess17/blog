@@ -13,12 +13,16 @@ export class AuthService {
     }
 
     async validateUser(email: string, pass: string): Promise<any> {
-        const user = await this.usersService.getOne({email});
-        const isMatch = await bcrypt.compare(pass, user.password);
+        const user = await this.usersService.findOne({email});
 
-        if (isMatch) {
-            return user;
+        if (user) {
+            const isMatch = await bcrypt.compare(pass, user.password);
+
+            if (isMatch) {
+                return user;
+            }
         }
+
         return null;
     }
 
@@ -26,10 +30,16 @@ export class AuthService {
         const payload = {id: user.id};
         return {
             access_token: this.jwtService.sign(payload),
+            user: user,
         };
     }
 
     async register(createUserDto) {
-        return await this.usersService.create(createUserDto);
+        const user = await this.usersService.create(createUserDto);
+        const payload = {id: user.id};
+        return {
+            access_token: this.jwtService.sign(payload),
+            user,
+        };
     }
 }

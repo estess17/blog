@@ -16,10 +16,16 @@ export class UsersService {
     }
 
     async findOne(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<User | undefined> {
-        return this.prisma.user.findUnique({
+        const user = this.prisma.user.findUnique({
             where: userWhereUniqueInput,
             include: {posts: true},
         });
+
+        if(user) {
+            return user;
+        } else {
+            throw new HttpException('User with this email not registered', HttpStatus.NOT_FOUND);
+        }
     }
 
     async create(createUserDto: CreateUserDto): Promise<User> {

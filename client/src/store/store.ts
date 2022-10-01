@@ -2,6 +2,7 @@ import {configureStore, ThunkAction, Action} from '@reduxjs/toolkit';
 import postsSlice from './slices/posts.slice';
 import darkModeSlice from './slices/dark-mode.slice';
 import modalsSlice from './slices/modals.slice';
+import AuthSlice from './slices/auth.slice';
 
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
         darkMode: darkModeSlice,
         modals: modalsSlice,
         posts: postsSlice,
+        auth: AuthSlice
     },
 });
 

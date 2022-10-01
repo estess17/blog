@@ -3,12 +3,15 @@ import {Link} from 'react-router-dom';
 import {CgSearch, CgMoon, CgSun} from 'react-icons/cg';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 import {toggle} from '../../../store/slices/dark-mode.slice';
-import {openLogin, openRegister} from '../../../store/slices/modals.slice';
+import {openLogin} from '../../../store/slices/modals.slice';
+import avatar from '../../../assets/images/avatar.png';
+import {ProfileDropdown} from '../../index';
 
 
 function Header() {
     const dark = useAppSelector(state => state.darkMode.isDark);
     const [isDark, setIsDark] = useState(dark);
+    const user = useAppSelector(state => state.auth.user);
 
     const dispatch = useAppDispatch();
 
@@ -28,7 +31,7 @@ function Header() {
                 <Link to="/" className="text-3xl font-semibold text-gray-800 select-none dark:text-gray-100">
                     Blog
                 </Link>
-                <div className="flex">
+                <div className="flex items-center">
                     <CgSearch
                         className="text-4xl text-gray-800 font-thin cursor-pointer mr-3 p-1.5 rounded-full
                         hover:bg-gray-200 dark:text-gray-100 dark:hover:bg-slate-700"
@@ -39,16 +42,20 @@ function Header() {
                             hover:bg-gray-200 dark:text-gray-100 dark:hover:bg-slate-700"
                             onClick={() => setIsDark(state => !state)}/> :
                         <CgMoon
-                            className="text-4xl text-gray-800 font-thin cursor-pointer  p-1.5 rounded-full
+                            className="text-4xl text-gray-800 font-thin cursor-pointer p-1.5 rounded-full
                             hover:bg-gray-200 dark:text-gray-100 dark:hover:bg-slate-700"
                             onClick={() => setIsDark(state => !state)}/>
                     }
-                    <button
-                        className="btn w-20 dark:bg-transparent  dark:hover:bg-slate-700 dark:focus:ring-slate-600 dark:focus:ring-offset-slate-800"
-                        onClick={() => dispatch(openLogin())}
-                    >
-                        Log in
-                    </button>
+                    {
+                        user ?
+                            <ProfileDropdown/> :
+                            <button
+                                className="btn w-20 dark:bg-transparent  dark:hover:bg-slate-700 dark:focus:ring-slate-600 dark:focus:ring-offset-slate-800"
+                                onClick={() => dispatch(openLogin())}
+                            >
+                                Log in
+                            </button>
+                    }
                 </div>
             </div>
         </header>

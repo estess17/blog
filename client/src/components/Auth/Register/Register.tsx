@@ -1,20 +1,42 @@
 import {Dialog, Transition} from '@headlessui/react';
-import React, {FormEvent, Fragment, useRef, useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../../utils/hooks';
-import {closeRegister, openLogin, openRegister} from '../../store/slices/modals.slice';
+import React, {Fragment, useRef} from 'react';
+import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
+import {closeLogin, openLogin} from '../../../store/slices/modals.slice';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {register as signUp} from '../../../store/asyncActions/auth.actions';
+import {IRegisterFormInputs} from '../../../utils/interfaces';
+import * as yup from 'yup';
+
+
+const registerSchema = yup.object({
+    username: yup.string().min(4).max(32).required(),
+    email: yup.string().email().required(),
+    password: yup.string().min(6).max(64).required(),
+}).required();
 
 
 function Register() {
     const open = useAppSelector(state => state.modals.isRegister);
     const cancelButtonRef = useRef(null);
     const dispatch = useAppDispatch();
+    const {register, handleSubmit, reset, formState: {errors}} = useForm<IRegisterFormInputs>({
+        resolver: yupResolver(registerSchema),
+    });
 
-    function handleClose() {
-        dispatch(closeRegister());
+    function onSubmit(data: IRegisterFormInputs) {
+        dispatch(signUp(data));
+        reset();
     }
 
-    function handleSubmit() {
-        console.log('submit');
+    function handleClose() {
+        reset();
+        dispatch(closeLogin());
+    }
+
+    function onSwitch() {
+        reset();
+        dispatch(openLogin());
     }
 
     return (
@@ -58,34 +80,37 @@ function Register() {
                                                 </p>
                                                 <form className="flex flex-col mt-4">
                                                     <input type="text"
-                                                           name="name"
                                                            placeholder="Nickname"
-                                                           className="py-2.5 px-2 border rounded outline-none focus:ring-1 focus:ring-gray-300 text-sm
-                                                            dark:bg-transparent dark:border-slate-700 dark:focus:ring-slate-500 dark:text-slate-400 dark:placeholder-slate-500"
+                                                           autoComplete="username"
+                                                           className={`input ${errors.username && 'border-red-600 dark:border-red-900'}`}
+                                                           {...register('username', {required: true})}
                                                     />
+                                                    <p className="mt-1 text-sm text-red-800 font-medium dark:text-red-600">
+                                                        {errors.username?.message}
+                                                    </p>
                                                     <input type="email"
-                                                           name="email"
                                                            placeholder="Email"
-                                                           className="mt-2 py-2.5 px-2 border rounded outline-none focus:ring-1 focus:ring-gray-300 text-sm
-                                                           dark:bg-transparent dark:border-slate-700 dark:focus:ring-slate-500 dark:text-slate-400 dark:placeholder-slate-500"
+                                                           autoComplete="email"
+                                                           className={`input mt-2 ${errors.email && 'border-red-600 dark:border-red-900'}`}
+                                                           {...register('email', {required: true})}
                                                     />
+                                                    <p className="mt-1 text-sm text-red-800 font-medium dark:text-red-600">
+                                                        {errors.email?.message}
+                                                    </p>
                                                     <input type="password"
-                                                           name="password"
                                                            placeholder="Password"
-                                                           className="mt-2 py-2.5 px-2 border rounded outline-none focus:ring-1 focus:ring-gray-300 text-sm
-                                                            dark:bg-transparent dark:border-slate-700 dark:focus:ring-slate-500 dark:text-slate-400 dark:placeholder-slate-500"
+                                                           autoComplete="current-password"
+                                                           className={`input mt-2 ${errors.password && 'border-red-600 dark:border-red-900'}`}
+                                                           {...register('password', {required: true})}
                                                     />
-                                                    <input type="password"
-                                                           name="password"
-                                                           placeholder="Confirm password"
-                                                           className="mt-2 py-2.5 px-2 border rounded outline-none focus:ring-1 focus:ring-gray-300 text-sm
-                                                            dark:bg-transparent dark:border-slate-700 dark:focus:ring-slate-500 dark:text-slate-400 dark:placeholder-slate-500"
-                                                    />
+                                                    <p className="mt-1 text-sm text-red-800 font-medium dark:text-red-600">
+                                                        {errors.password?.message}
+                                                    </p>
                                                 </form>
                                                 <p className="mt-4 text-sm text-gray-500 dark:text-slate-400">
                                                     Already have an account?&nbsp;
                                                     <span className="text-teal-600 font-semibold cursor-pointer"
-                                                          onClick={() => dispatch(openLogin())}>Log in</span>
+                                                          onClick={onSwitch}>Log in</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -96,7 +121,7 @@ function Register() {
                                     <button
                                         type="button"
                                         className="btn bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 dark:focus:ring-offset-slate-800"
-                                        onClick={handleSubmit}
+                                        onClick={handleSubmit(onSubmit)}
                                     >
                                         Sign Up
                                     </button>
