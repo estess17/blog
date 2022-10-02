@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Layout} from './components';
+import {Layout, PrivateWrapper} from './components';
 import {Route, Routes} from 'react-router-dom';
 import {MainPage, PostPage, ProfilePage} from './pages';
 import {ToastContainer} from 'react-toastify';
@@ -15,14 +15,16 @@ function App() {
 
     useEffect(() => {
         dispatch(getProfile());
-    }, [accessToken])
+    }, [accessToken]);
 
     return (
         <Layout>
             <Routes>
                 <Route path="/" element={<MainPage/>}/>
                 <Route path="post/:id" element={<PostPage/>}/>
-                <Route path="profile" element={<ProfilePage/>}/>
+                <Route element={<PrivateWrapper isAuthenticated={accessToken}/>}>
+                    <Route path="/profile" element={<ProfilePage/>}/>
+                </Route>
             </Routes>
 
             <ToastContainer

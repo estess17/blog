@@ -49,6 +49,7 @@ export const getProfile = createAsyncThunk(
             return response.data;
         } catch (error: any) {
             const message = error.response.data.message;
+            thunkAPI.dispatch(logout());
             return thunkAPI.rejectWithValue(message);
         }
     },

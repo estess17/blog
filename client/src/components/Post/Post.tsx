@@ -3,20 +3,21 @@ import {IPost} from '../../utils/interfaces';
 import {Link} from 'react-router-dom';
 import avatar from '../../assets/images/avatar.png';
 import {CgComment, CgEye} from 'react-icons/cg';
+import cutText from '../../utils/cutText';
 
 
 function Post(props: { post: IPost }) {
     const post = props.post;
 
     return (
-        <div className="p-10 mb-3 rounded-md shadow bg-white dark:bg-slate-800">
+        <div className="p-10 rounded-md shadow bg-white dark:bg-slate-800 ">
             <Link to={`post/${post.id}`}
-                  className="block mb-2 text-3xl font-semibold text-gray-800 hover:text-gray-600 dark:text-slate-50 dark:hover:text-slate-300">
-                {post.title}
+                  className="block mb-2 text-xl font-semibold text-gray-800 hover:text-gray-600 dark:text-slate-100 dark:hover:text-slate-300">
+                {cutText(post.title, 50)}
             </Link>
             <Link to={`post/${post.id}`}
-                  className="block text-gray-500 hover:text-gray-400 dark:text-slate-200 dark:hover:text-slate-400">
-                {post.body}
+                  className="block text-sm text-gray-500 hover:text-gray-400 dark:text-slate-200 dark:hover:text-slate-400">
+                {cutText(post.body, 150)}
             </Link>
             <div className="flex items-center justify-between mt-3">
                 <div className="flex items-center">
@@ -24,7 +25,7 @@ function Post(props: { post: IPost }) {
                         <img src={avatar} alt="avatar" className="w-10 rounded-full mr-2 ring-2 ring-gray-100 dark:ring-slate-700"/>
                     </Link>
                     <div>
-                        <Link to={`user/${post.authorId}`} className="font-medium text-gray-800 dark:text-slate-100">
+                        <Link to={`user/${post.authorId}`} className="text-sm font-medium text-gray-800 dark:text-slate-100">
                             Dario Lelardi
                         </Link>
                         <p className="text-xs text-gray-500 dark:text-slate-400">23 minutes ago</p>
@@ -36,7 +37,7 @@ function Post(props: { post: IPost }) {
                         <CgComment className="mr-1"/> {post.comments.length}
                     </span>
                     <span className="flex items-center text-gray-600 dark:text-slate-500">
-                        <CgEye className="mr-1"/> {post.views}
+                        <CgEye className="mr-1"/> {post.views} views
                     </span>
                 </div>
             </div>
