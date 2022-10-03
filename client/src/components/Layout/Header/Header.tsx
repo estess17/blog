@@ -50,7 +50,7 @@ function Header() {
                         user ?
                             <ProfileDropdown/> :
                             <button
-                                className="btn w-20 dark:bg-transparent  dark:hover:bg-slate-700 dark:focus:ring-slate-600 dark:focus:ring-offset-slate-800"
+                                className="btn ml-3 dark:bg-transparent  dark:hover:bg-slate-700 dark:focus:ring-slate-600 dark:focus:ring-offset-slate-800"
                                 onClick={() => dispatch(openLogin())}
                             >
                                 Log in

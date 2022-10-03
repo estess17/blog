@@ -4,31 +4,36 @@ import {Link} from 'react-router-dom';
 import avatar from '../../assets/images/avatar.png';
 import {CgComment, CgEye} from 'react-icons/cg';
 import cutText from '../../utils/cutText';
+import timeSince from '../../utils/timeSince';
 
 
 function Post(props: { post: IPost }) {
     const post = props.post;
 
+
     return (
-        <div className="p-10 rounded-md shadow bg-white dark:bg-slate-800 ">
+        <div className="p-10 rounded-md shadow bg-white dark:bg-slate-800">
             <Link to={`post/${post.id}`}
                   className="block mb-2 text-xl font-semibold text-gray-800 hover:text-gray-600 dark:text-slate-100 dark:hover:text-slate-300">
                 {cutText(post.title, 50)}
             </Link>
             <Link to={`post/${post.id}`}
                   className="block text-sm text-gray-500 hover:text-gray-400 dark:text-slate-200 dark:hover:text-slate-400">
-                {cutText(post.body, 150)}
+                {cutText(JSON.stringify(post.body), 150)}
             </Link>
             <div className="flex items-center justify-between mt-3">
                 <div className="flex items-center">
                     <Link to={`user/${post.authorId}`}>
-                        <img src={avatar} alt="avatar" className="w-10 rounded-full mr-2 ring-2 ring-gray-100 dark:ring-slate-700"/>
+                        <img src={post.author?.avatar || avatar}
+                             alt="avatar"
+                             className="w-10 rounded-full mr-2 ring-2 ring-gray-100 dark:ring-slate-700"/>
                     </Link>
                     <div>
-                        <Link to={`user/${post.authorId}`} className="text-sm font-medium text-gray-800 dark:text-slate-100">
-                            Dario Lelardi
+                        <Link to={`user/${post.authorId}`}
+                              className="text-sm font-medium text-gray-800 dark:text-slate-100">
+                            {post.author?.username}
                         </Link>
-                        <p className="text-xs text-gray-500 dark:text-slate-400">23 minutes ago</p>
+                        <p className="text-xs text-gray-500 dark:text-slate-400">{timeSince(post.createdAt)}</p>
                     </div>
                 </div>
 
@@ -37,7 +42,7 @@ function Post(props: { post: IPost }) {
                         <CgComment className="mr-1"/> {post.comments.length}
                     </span>
                     <span className="flex items-center text-gray-600 dark:text-slate-500">
-                        <CgEye className="mr-1"/> {post.views} views
+                        <CgEye className="mr-1"/> {post.views}
                     </span>
                 </div>
             </div>

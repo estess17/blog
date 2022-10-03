@@ -14,7 +14,9 @@ function App() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(getProfile());
+        if (accessToken) {
+            dispatch(getProfile());
+        }
     }, [accessToken]);
 
     return (

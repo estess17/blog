@@ -120,7 +120,7 @@ function Register() {
                                     className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 dark:bg-slate-800">
                                     <button
                                         type="button"
-                                        className="btn bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 dark:focus:ring-offset-slate-800"
+                                        className="btn ml-3 bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 dark:focus:ring-offset-slate-800"
                                         onClick={handleSubmit(onSubmit)}
                                     >
                                         Sign Up

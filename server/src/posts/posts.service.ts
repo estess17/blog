@@ -20,7 +20,7 @@ export class PostsService {
     }
 
     async findAll(): Promise<Post[]> {
-        return await this.prisma.post.findMany({include: {author: true}});
+        return await this.prisma.post.findMany({include: {author: true, comments: true}});
     }
 
     async findOne(id: number) {

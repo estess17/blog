@@ -1,9 +1,9 @@
 export interface IUser {
-    name: string;
+    username: string;
     email: string;
     role: string;
     _id: string;
-    avatar: File | string | null;
+    avatar: string | null;
     threads: [];
     createdAt: Date;
     updatedAt: Date;
@@ -13,7 +13,7 @@ export interface IUser {
 export interface IPost {
     id: number;
     title: string;
-    body: string;
+    body: JSON;
     author?: IUser;
     authorId: number;
     comments: [];
