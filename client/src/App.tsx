@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Layout, PrivateWrapper} from './components';
 import {Route, Routes} from 'react-router-dom';
-import {MainPage, PostPage, ProfilePage} from './pages';
+import {MainPage, PostPage, ProfilePage, PostCreateEditPage} from './pages';
 import {ToastContainer} from 'react-toastify';
 import {useAppDispatch, useAppSelector} from './utils/hooks';
 import {getProfile} from './store/asyncActions/auth.actions';
@@ -26,6 +26,9 @@ function App() {
                 <Route path="post/:id" element={<PostPage/>}/>
                 <Route element={<PrivateWrapper isAuthenticated={accessToken}/>}>
                     <Route path="/profile" element={<ProfilePage/>}/>
+                </Route>
+                <Route element={<PrivateWrapper isAuthenticated={accessToken}/>}>
+                    <Route path="/create" element={<PostCreateEditPage/>}/>
                 </Route>
             </Routes>
 

@@ -5,6 +5,8 @@ import Register from './Auth/Register/Register';
 import ProfileDropdown from './ProfileDropdown/ProfileDropdown';
 import PrivateWrapper from './PrivateWrapper/PrivateWrapper';
 import PostSkeleton from './Post/PostSkeleton/PostSkeleton';
+import EditorMenuBar from './EditorMenuBar/EditorMenuBar';
 
 
-export {Layout, Post, Login, Register, ProfileDropdown, PrivateWrapper, PostSkeleton};
+
+export {Layout, Post, Login, Register, ProfileDropdown, PrivateWrapper, PostSkeleton, EditorMenuBar};

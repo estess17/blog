@@ -39,7 +39,7 @@ function Post(props: { post: IPost }) {
 
                 <div className="flex items-center">
                     <span className="flex items-center mr-2 text-gray-600 dark:text-slate-500">
-                        <CgComment className="mr-1"/> {post.comments.length}
+                        <CgComment className="mr-1"/> {post?.comments?.length}
                     </span>
                     <span className="flex items-center text-gray-600 dark:text-slate-500">
                         <CgEye className="mr-1"/> {post.views}

@@ -11,6 +11,9 @@ module.exports = {
             padding: '10px'
         },
         extend: {
+            fontFamily: {
+               'jetbrains-mono': ['JetBrains Mono', 'monospace']
+            }
         },
         plugins: [],
     },

@@ -38,7 +38,7 @@ function MainPage() {
                 </button>
             </div>
             <div className="grid gap-8 xl:grid-cols-3 lg:grid-cols-2">
-                {posts ?
+                {(posts && posts.length > 0) ?
                     (isLoading ?
                             <>
                                 <PostSkeleton/>

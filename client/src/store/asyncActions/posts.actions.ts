@@ -1,6 +1,7 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {toast} from 'react-toastify';
 import PostsService from '../../services/posts.service';
+import {JSONContent} from '@tiptap/react';
 
 
 export const getAll = createAsyncThunk(
@@ -8,6 +9,21 @@ export const getAll = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const response = await PostsService.getPosts();
+            return response.data;
+        } catch (error: any) {
+            const message = error.response.data.message;
+            toast.error(message);
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+);
+
+export const create = createAsyncThunk(
+    'posts/create',
+    async (post: { title: string, body: JSONContent }, thunkAPI) => {
+        try {
+            const response = await PostsService.createPost(post);
+            toast.success('Post created!');
             return response.data;
         } catch (error: any) {
             const message = error.response.data.message;
