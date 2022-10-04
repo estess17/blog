@@ -1,8 +1,8 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {CreatePostDto} from './dto/create-post.dto';
 import {UpdatePostDto} from './dto/update-post.dto';
 import {PrismaService} from '../prisma.service';
-import {Post, Prisma} from '@prisma/client';
+import {Post} from '@prisma/client';
 
 
 @Injectable()
@@ -23,15 +23,35 @@ export class PostsService {
         return await this.prisma.post.findMany({include: {author: true, comments: true}});
     }
 
-    async findOne(id: number) {
-        return await this.prisma.post.findUnique({where: {id}, include: {author: true}});
+    async findOne(id: number): Promise<Post> {
+        const post = await this.prisma.post.findUnique({where: {id}, include: {author: true}});
+
+        if (!post) {
+            this.throwPostNotFound(id);
+        }
+
+        return post;
     }
 
-    async update(id: number, updatePostDto: UpdatePostDto) {
+    async update(id: number, updatePostDto: UpdatePostDto): Promise<Post> {
+        await this.checkIfPostExist(id);
         return await this.prisma.post.update({where: {id}, data: updatePostDto});
     }
 
-    async remove(id: number) {
+    async remove(id: number): Promise<Post> {
+        await this.checkIfPostExist(id);
         return await this.prisma.post.delete({where: {id}});
+    }
+
+    private async checkIfPostExist(id: number) {
+        const post = await this.prisma.post.findUnique({where: {id}});
+
+        if (!post) {
+            this.throwPostNotFound(id);
+        }
+    }
+
+    private throwPostNotFound(id: number) {
+        throw new NotFoundException(`Post with id ${id} not found`);
     }
 }
