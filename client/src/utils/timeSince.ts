@@ -1,4 +1,4 @@
-export default function timeSince(date: Date | string) {
+export default function timeSince(date: any) {
     const formatDate = new Date(date);
 
     // @ts-ignore

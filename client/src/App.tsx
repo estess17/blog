@@ -19,17 +19,27 @@ function App() {
         }
     }, [accessToken]);
 
+
     return (
         <Layout>
             <Routes>
                 <Route path="/" element={<MainPage/>}/>
-                <Route path="post/:id" element={<PostPage/>}/>
+
+                <Route path="/post">
+                    <Route path=":id" element={<PostPage/>}/>
+                    <Route element={<PrivateWrapper isAuthenticated={accessToken}/>}>
+                        <Route path="create" element={<PostCreateEditPage/>}/>
+                    </Route>
+                    <Route element={<PrivateWrapper isAuthenticated={accessToken}/>}>
+                        <Route path="edit/:id" element={<PostCreateEditPage/>}/>
+                    </Route>
+                </Route>
+
                 <Route element={<PrivateWrapper isAuthenticated={accessToken}/>}>
                     <Route path="/profile" element={<ProfilePage/>}/>
                 </Route>
-                <Route element={<PrivateWrapper isAuthenticated={accessToken}/>}>
-                    <Route path="/create" element={<PostCreateEditPage/>}/>
-                </Route>
+
+                <Route path="*" element={<MainPage/>}/>
             </Routes>
 
             <ToastContainer

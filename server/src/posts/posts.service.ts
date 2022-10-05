@@ -20,11 +20,19 @@ export class PostsService {
     }
 
     async findAll(): Promise<Post[]> {
-        return await this.prisma.post.findMany({include: {author: true, comments: true}});
+        return await this.prisma.post.findMany({
+            orderBy: {createdAt: 'desc'},
+            include: {author: true, comments: true}
+        });
     }
 
     async findOne(id: number): Promise<Post> {
-        const post = await this.prisma.post.findUnique({where: {id}, include: {author: true}});
+        const post = await this.prisma.post.update({
+            where: {id},
+            data: {views: {increment: 1}},
+            include: {author: true}
+        })
+        //const post = await this.prisma.post.findUnique({where: {id}, include: {author: true}});
 
         if (!post) {
             this.throwPostNotFound(id);

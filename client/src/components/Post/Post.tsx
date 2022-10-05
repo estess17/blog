@@ -5,11 +5,32 @@ import avatar from '../../assets/images/avatar.png';
 import {CgComment, CgEye} from 'react-icons/cg';
 import cutText from '../../utils/cutText';
 import timeSince from '../../utils/timeSince';
+import {useEditor} from '@tiptap/react';
+import EditorLink from '@tiptap/extension-link';
+import StarterKit from '@tiptap/starter-kit';
 
 
 function Post(props: { post: IPost }) {
     const post = props.post;
 
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            EditorLink.configure({
+                openOnClick: false,
+            }),
+        ],
+        content: post.body,
+        editable: false,
+    });
+
+    const body: string | undefined = editor?.getText();
+
+    function cutBody() {
+        if (body) {
+            return cutText(body, 110);
+        } else return 'error';
+    }
 
     return (
         <div className="p-10 rounded-md shadow bg-white dark:bg-slate-800">
@@ -19,7 +40,7 @@ function Post(props: { post: IPost }) {
             </Link>
             <Link to={`post/${post.id}`}
                   className="block text-sm text-gray-500 hover:text-gray-400 dark:text-slate-200 dark:hover:text-slate-400">
-                {cutText(JSON.stringify(post.body), 150)}
+                {cutBody()}
             </Link>
             <div className="flex items-center justify-between mt-3">
                 <div className="flex items-center">

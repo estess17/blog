@@ -1,7 +1,7 @@
 import React, {FormEvent, useState} from 'react';
 import {useEditor, EditorContent, JSONContent} from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import {EditorMenuBar} from '../../components';
+import {EditorMenuBar, GoBackBtn} from '../../components';
 import EditorLink from '@tiptap/extension-link';
 import {useAppDispatch} from '../../utils/hooks';
 import {create} from '../../store/asyncActions/posts.actions';
@@ -20,7 +20,7 @@ function PostCreateEditPage() {
                 validate: href => /^https?:\/\//.test(href),
             }),
         ],
-        content: '<p>Hello World!</p>',
+        content: '<p>Post body</p>',
     });
 
     const dispatch = useAppDispatch();
@@ -40,10 +40,10 @@ function PostCreateEditPage() {
     }
 
     return (
-        <div className="container">
-            <form className="flex flex-col lg:w-2/3 w-full mx-auto my-10 p-10 rounded bg-white dark:bg-slate-800"
-                  onSubmit={handleSubmit}>
-                <h1 className="text-2xl font-semibold text-gray-800 mb-4 dark:text-slate-100">Create post</h1>
+        <div className="lg:w-2/3 w-full mx-auto my-10">
+            <GoBackBtn/>
+            <div className="flex flex-col my-5 py-5 px-10 rounded bg-white dark:bg-slate-800">
+                <h1 className="text-2xl font-semibold text-gray-800 my-4 dark:text-slate-100">Create post</h1>
                 <input className="input"
                        type="text"
                        placeholder="Post title"
@@ -51,17 +51,20 @@ function PostCreateEditPage() {
                        onChange={(e) => setTitle(e.target.value)}
                 />
 
-                <div className="mt-4">
+                <div className="mt-4 border rounded dark:border-slate-700">
                     <EditorMenuBar editor={editor}/>
                     <EditorContent editor={editor}/>
                 </div>
 
                 <button
                     className="btn self-end mt-4 bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 dark:focus:ring-offset-slate-800"
-                    type="submit">
+                    type="submit"
+                    onClick={handleSubmit}
+                >
                     Create
                 </button>
-            </form>
+            </div>
+
         </div>
     );
 }

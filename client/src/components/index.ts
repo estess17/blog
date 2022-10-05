@@ -6,7 +6,21 @@ import ProfileDropdown from './ProfileDropdown/ProfileDropdown';
 import PrivateWrapper from './PrivateWrapper/PrivateWrapper';
 import PostSkeleton from './Post/PostSkeleton/PostSkeleton';
 import EditorMenuBar from './EditorMenuBar/EditorMenuBar';
+import GoBackBtn from './GoBackBtn/GoBackBtn';
+import Comment from './Comment/Comment';
+import CommentEditor from './Comment/CommentEditor/CommentEditor';
 
 
-
-export {Layout, Post, Login, Register, ProfileDropdown, PrivateWrapper, PostSkeleton, EditorMenuBar};
+export {
+    Layout,
+    Post,
+    Login,
+    Register,
+    ProfileDropdown,
+    PrivateWrapper,
+    PostSkeleton,
+    EditorMenuBar,
+    GoBackBtn,
+    Comment,
+    CommentEditor,
+};

@@ -15,7 +15,7 @@ function MainPage() {
 
     function handleClick() {
         if (user) {
-            navigate('create');
+            navigate('post/create');
         } else {
             dispatch(openLogin());
         }
