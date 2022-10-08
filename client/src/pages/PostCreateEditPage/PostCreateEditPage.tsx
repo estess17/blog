@@ -1,41 +1,84 @@
-import React, {FormEvent, useState} from 'react';
+import React, {FormEvent, useEffect, useState} from 'react';
 import {useEditor, EditorContent, JSONContent} from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import {EditorMenuBar, GoBackBtn} from '../../components';
 import EditorLink from '@tiptap/extension-link';
 import {useAppDispatch} from '../../utils/hooks';
-import {create} from '../../store/asyncActions/posts.actions';
-import {useNavigate} from 'react-router-dom';
+import {create, update} from '../../store/asyncActions/posts.actions';
+import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import {CodeBlockLowlight} from '@tiptap/extension-code-block-lowlight';
+import {lowlight} from 'lowlight'
+import PostsService from "../../services/posts.service";
+import {IPost} from "../../utils/interfaces";
 
 
 function PostCreateEditPage() {
+    const {id} = useParams();
     const [title, setTitle] = useState('');
+    const [post, setPost] = useState<null | IPost>(null);
 
-    const editor = useEditor({
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    const createEditor = useEditor({
         extensions: [
             StarterKit,
             EditorLink.configure({
                 openOnClick: false,
                 validate: href => /^https?:\/\//.test(href),
             }),
+            CodeBlockLowlight.configure({
+                lowlight,
+            }),
         ],
         content: '<p>Post body</p>',
     });
 
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+    const editEditor = useEditor({
+        extensions: [
+            StarterKit,
+            EditorLink.configure({
+                openOnClick: false,
+                validate: href => /^https?:\/\//.test(href)
+            }),
+            CodeBlockLowlight.configure({
+                lowlight,
+            }),
+        ],
+        content: '',
+    });
+
+    useEffect(() => {
+        if (id) {
+            PostsService.getPostById(id).then(res => {
+                setPost(res.data);
+                setTitle(res.data.title);
+            });
+        }
+    }, [id]);
+
+    useEffect(() => {
+        if (editEditor && !editEditor.isDestroyed) {
+            editEditor.chain().focus().setContent(post?.body!).run();
+        }
+    }, [editEditor, post]);
+
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
 
-        const body: JSONContent | undefined = editor?.getJSON();
+        const body: JSONContent | undefined = id ? editEditor?.getJSON() : createEditor?.getJSON();
 
         if (title.trim() && body) {
-            dispatch(create({title, body}));
-            navigate('/');
+            if (id) {
+                dispatch(update({post: {title, body}, id}));
+            } else {
+                dispatch(create({title, body}));
+            }
+            navigate(-1);
         } else {
-            toast.error('Fill all fields');
+            toast.error('Fill all fields!');
         }
     }
 
@@ -43,7 +86,7 @@ function PostCreateEditPage() {
         <div className="lg:w-2/3 w-full mx-auto my-10">
             <GoBackBtn/>
             <div className="flex flex-col my-5 py-5 px-10 rounded bg-white dark:bg-slate-800">
-                <h1 className="text-2xl font-semibold text-gray-800 my-4 dark:text-slate-100">Create post</h1>
+                <h1 className="text-2xl font-semibold text-gray-800 my-4 dark:text-slate-100">{id ? 'Edit' : 'Create'} post</h1>
                 <input className="input"
                        type="text"
                        placeholder="Post title"
@@ -52,8 +95,8 @@ function PostCreateEditPage() {
                 />
 
                 <div className="mt-4 border rounded dark:border-slate-700">
-                    <EditorMenuBar editor={editor}/>
-                    <EditorContent editor={editor}/>
+                    <EditorMenuBar editor={id ? editEditor : createEditor}/>
+                    <EditorContent editor={id ? editEditor : createEditor}/>
                 </div>
 
                 <button
@@ -61,7 +104,7 @@ function PostCreateEditPage() {
                     type="submit"
                     onClick={handleSubmit}
                 >
-                    Create
+                    {id ? 'Edit' : 'Create'}
                 </button>
             </div>
 

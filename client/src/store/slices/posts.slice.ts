@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {IPost} from '../../utils/interfaces';
-import {create, getAll} from '../asyncActions/posts.actions';
+import {create, getAll, remove, update} from '../asyncActions/posts.actions';
 
 
 interface postsState {
@@ -36,6 +36,26 @@ export const postsSlice = createSlice({
             state.posts.unshift(action.payload);
         },
         [create.rejected.type]: (state) => {
+            state.isLoading = false;
+        },
+        [remove.pending.type]: (state) => {
+            state.isLoading = true;
+        },
+        [remove.fulfilled.type]: (state, action: PayloadAction<IPost>) => {
+            state.isLoading = false;
+            state.posts = state.posts.filter(post => post.id !== action.payload.id);
+        },
+        [remove.rejected.type]: (state) => {
+            state.isLoading = false;
+        },
+        [update.pending.type]: (state) => {
+            state.isLoading = true;
+        },
+        [update.fulfilled.type]: (state, action: PayloadAction<IPost>) => {
+            state.isLoading = false;
+            state.posts = state.posts.map(post => post.id == action.payload.id ? action.payload : post);
+        },
+        [update.rejected.type]: (state) => {
             state.isLoading = false;
         },
     },

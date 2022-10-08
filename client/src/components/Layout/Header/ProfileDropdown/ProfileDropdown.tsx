@@ -1,9 +1,9 @@
 import React, {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';
-import avatar from '../../assets/images/avatar.png';
+import avatar from '../../../../assets/images/avatar.png';
 import {Link} from 'react-router-dom';
-import {useAppDispatch} from '../../utils/hooks';
-import {logout} from '../../store/asyncActions/auth.actions';
+import {useAppDispatch} from '../../../../utils/hooks';
+import {logout} from '../../../../store/asyncActions/auth.actions';
 import {CgLogOut, CgProfile} from 'react-icons/cg';
 
 

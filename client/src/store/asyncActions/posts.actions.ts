@@ -33,3 +33,34 @@ export const create = createAsyncThunk(
     },
 );
 
+export const remove = createAsyncThunk(
+    'posts/remove',
+    async (id: string, thunkAPI) => {
+        try {
+            const response = await PostsService.removePost(id);
+            toast.success('Post deleted!');
+            return response.data;
+        } catch (error: any) {
+            const message = error.response.data.message;
+            toast.error(message);
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+);
+
+export const update = createAsyncThunk(
+    'posts/update',
+    async ({post, id}: { post: { title: string, body: JSONContent }, id: string }, thunkAPI) => {
+        try {
+            const response = await PostsService.updatePost(post, id);
+            toast.success('Post updated!');
+            return response.data;
+        } catch (error: any) {
+            const message = error.response.data.message;
+            toast.error(message);
+            return thunkAPI.rejectWithValue(message);
+        }
+    },
+);
+
+
